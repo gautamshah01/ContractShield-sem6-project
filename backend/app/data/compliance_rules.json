@@ -1,0 +1,221 @@
+{
+    "indian_contract_act_1872": [
+        {
+            "rule_id": "ICA_S10",
+            "rule_name": "Essential Elements of Valid Contract",
+            "section": "Section 10",
+            "reference": "Indian Contract Act, 1872 - Section 10",
+            "description": "Contract must have: free consent, competent parties, lawful consideration, lawful object, and not expressly declared void",
+            "check_type": "presence",
+            "keywords": [
+                "consent",
+                "consideration",
+                "competent",
+                "lawful"
+            ],
+            "severity": "high"
+        },
+        {
+            "rule_id": "ICA_S23",
+            "rule_name": "Lawful Consideration and Object",
+            "section": "Section 23",
+            "reference": "Indian Contract Act, 1872 - Section 23",
+            "description": "Consideration and object must be lawful (not forbidden by law, not fraudulent, not immoral, not opposed to public policy)",
+            "check_type": "negative_keywords",
+            "keywords": [
+                "illegal",
+                "fraudulent",
+                "immoral",
+                "public policy"
+            ],
+            "severity": "high"
+        },
+        {
+            "rule_id": "ICA_S27",
+            "rule_name": "Restraint of Trade",
+            "section": "Section 27",
+            "reference": "Indian Contract Act, 1872 - Section 27",
+            "description": "Agreements in restraint of trade are void, except for sale of goodwill",
+            "check_type": "duration_check",
+            "keywords": [
+                "non-compete",
+                "restraint",
+                "restriction",
+                "prohibition"
+            ],
+            "max_duration_months": 12,
+            "severity": "high"
+        },
+        {
+            "rule_id": "ICA_S73",
+            "rule_name": "Compensation for Breach",
+            "section": "Section 73",
+            "reference": "Indian Contract Act, 1872 - Section 73",
+            "description": "Party suffering breach entitled to compensation for loss or damage naturally arising",
+            "check_type": "presence",
+            "keywords": [
+                "breach",
+                "compensation",
+                "damages",
+                "remedy"
+            ],
+            "severity": "medium"
+        }
+    ],
+    "information_technology_act_2000": [
+        {
+            "rule_id": "IT_S3",
+            "rule_name": "Electronic Signature Validity",
+            "section": "Section 3",
+            "reference": "IT Act, 2000 - Section 3",
+            "description": "Electronic signatures are legally valid if authenticated by approved methods",
+            "check_type": "presence",
+            "keywords": [
+                "electronic signature",
+                "digital signature",
+                "e-signature"
+            ],
+            "severity": "medium"
+        },
+        {
+            "rule_id": "IT_S4",
+            "rule_name": "Legal Recognition of Electronic Records",
+            "section": "Section 4",
+            "reference": "IT Act, 2000 - Section 4",
+            "description": "Contracts cannot be denied validity solely because they are in electronic form",
+            "check_type": "presence",
+            "keywords": [
+                "electronic",
+                "digital",
+                "online",
+                "e-contract"
+            ],
+            "severity": "low"
+        },
+        {
+            "rule_id": "IT_S65",
+            "rule_name": "Electronic Evidence Admissibility",
+            "section": "Section 65",
+            "reference": "IT Act, 2000 - Section 65",
+            "description": "Electronic records are admissible as evidence",
+            "check_type": "presence",
+            "keywords": [
+                "evidence",
+                "record",
+                "electronic record"
+            ],
+            "severity": "low"
+        }
+    ],
+    "employment_specific": [
+        {
+            "rule_id": "EMP_NOTICE",
+            "rule_name": "Notice Period Requirement",
+            "section": "General Employment Practice",
+            "reference": "Standard Employment Practice in India",
+            "description": "Employment contracts should specify notice period (typically 30-90 days)",
+            "check_type": "presence",
+            "keywords": [
+                "notice period",
+                "resignation",
+                "termination notice"
+            ],
+            "min_days": 30,
+            "severity": "medium"
+        },
+        {
+            "rule_id": "EMP_WAGE",
+            "rule_name": "Wage Payment Terms",
+            "section": "Payment of Wages Act, 1936",
+            "reference": "Payment of Wages Act, 1936",
+            "description": "Clear specification of wage amount, payment frequency, and method",
+            "check_type": "presence",
+            "keywords": [
+                "salary",
+                "wage",
+                "compensation",
+                "payment",
+                "remuneration"
+            ],
+            "severity": "high"
+        },
+        {
+            "rule_id": "EMP_HOURS",
+            "rule_name": "Working Hours Specification",
+            "section": "Factories Act, 1948",
+            "reference": "Factories Act, 1948 / Shops and Establishments Act",
+            "description": "Specification of working hours and overtime provisions",
+            "check_type": "presence",
+            "keywords": [
+                "working hours",
+                "work hours",
+                "overtime",
+                "shift"
+            ],
+            "max_hours_per_week": 48,
+            "severity": "medium"
+        },
+        {
+            "rule_id": "EMP_PROBATION",
+            "rule_name": "Probation Period Clarity",
+            "section": "General Employment Practice",
+            "reference": "Standard Employment Practice in India",
+            "description": "If applicable, probation period should be clearly defined (typically 3-6 months)",
+            "check_type": "optional_presence",
+            "keywords": [
+                "probation",
+                "probationary period",
+                "trial period"
+            ],
+            "max_months": 6,
+            "severity": "low"
+        }
+    ],
+    "general_best_practices": [
+        {
+            "rule_id": "BP_DATES",
+            "rule_name": "Effective Date Specification",
+            "section": "Best Practice",
+            "reference": "Contract Drafting Best Practice",
+            "description": "Contract should clearly specify effective date and duration",
+            "check_type": "presence",
+            "keywords": [
+                "effective date",
+                "commencement",
+                "duration",
+                "term"
+            ],
+            "severity": "medium"
+        },
+        {
+            "rule_id": "BP_DEFINITIONS",
+            "rule_name": "Defined Terms",
+            "section": "Best Practice",
+            "reference": "Contract Drafting Best Practice",
+            "description": "Important terms should be clearly defined",
+            "check_type": "presence",
+            "keywords": [
+                "defined",
+                "definition",
+                "means",
+                "shall mean"
+            ],
+            "severity": "low"
+        },
+        {
+            "rule_id": "BP_ENTIRE_AGREEMENT",
+            "rule_name": "Entire Agreement Clause",
+            "section": "Best Practice",
+            "reference": "Contract Drafting Best Practice",
+            "description": "Clause stating this contract supersedes all prior agreements",
+            "check_type": "presence",
+            "keywords": [
+                "entire agreement",
+                "supersedes",
+                "prior agreement",
+                "complete agreement"
+            ],
+            "severity": "low"
+        }
+    ]
+}

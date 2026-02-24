@@ -1,0 +1,66 @@
+# render.yaml — Render Blueprint for ContractShield Backend
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: contractshield-backend
+    runtime: python
+    region: singapore        # closest to India; change to oregon/frankfurt as needed
+    plan: free
+
+    # ── Build ──────────────────────────────────────────────────────────────────
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python -m spacy download en_core_web_sm
+
+    # ── Start ──────────────────────────────────────────────────────────────────
+    # eventlet worker is required for Flask-SocketIO
+    startCommand: >
+      gunicorn
+      --worker-class eventlet
+      --workers 1
+      --bind 0.0.0.0:$PORT
+      --timeout 120
+      --keep-alive 5
+      --access-logfile -
+      --error-logfile -
+      run:app
+
+    # ── Health check ───────────────────────────────────────────────────────────
+    healthCheckPath: /health
+
+    # ── Environment variables ─────────────────────────────────────────────────
+    # Set SECRET values in the Render dashboard (not here).
+    # Only non-secret defaults are listed here.
+    envVars:
+      - key: FLASK_ENV
+        value: production
+
+      - key: FLASK_APP
+        value: run.py
+
+      - key: SPACY_MODEL
+        value: en_core_web_sm
+
+      - key: MAX_CONTENT_LENGTH
+        value: "16777216"
+
+      - key: GROQ_API_URL
+        value: https://api.groq.com/openai/v1/chat/completions
+
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+
+      - key: DEBUG
+        value: "False"
+
+      - key: TESTING
+        value: "False"
+
+      # ⚠️  Set these in Render Dashboard → Environment:
+      # DATABASE_URL   → your Supabase PostgreSQL connection string
+      # SECRET_KEY     → python -c "import secrets; print(secrets.token_hex(32))"
+      # JWT_SECRET_KEY → python -c "import secrets; print(secrets.token_hex(32))"
+      # GROQ_API_KEY   → from console.groq.com
+      # CORS_ORIGINS   → https://your-app.vercel.app

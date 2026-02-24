@@ -1,0 +1,197 @@
+{
+    "mandatory_clauses": [
+        {
+            "name": "Parties Identification",
+            "category": "essential",
+            "importance": "mandatory",
+            "description": "Clear identification of all parties entering into the contract",
+            "keywords": [
+                "party",
+                "parties",
+                "between",
+                "hereinafter"
+            ]
+        },
+        {
+            "name": "Consideration",
+            "category": "essential",
+            "importance": "mandatory",
+            "description": "Specification of what each party will give or receive (Indian Contract Act, 1872 - Section 10)",
+            "keywords": [
+                "consideration",
+                "payment",
+                "compensation",
+                "exchange"
+            ]
+        },
+        {
+            "name": "Termination Clause",
+            "category": "legal",
+            "importance": "mandatory",
+            "description": "Conditions and procedures for ending the contract",
+            "keywords": [
+                "termination",
+                "terminate",
+                "end",
+                "cancel",
+                "notice period"
+            ]
+        },
+        {
+            "name": "Dispute Resolution",
+            "category": "legal",
+            "importance": "mandatory",
+            "description": "Mechanism for resolving disputes (arbitration, mediation, or court jurisdiction)",
+            "keywords": [
+                "dispute",
+                "arbitration",
+                "mediation",
+                "jurisdiction",
+                "resolution"
+            ]
+        },
+        {
+            "name": "Governing Law",
+            "category": "legal",
+            "importance": "mandatory",
+            "description": "Specification of which jurisdiction's laws will govern the contract",
+            "keywords": [
+                "governing law",
+                "jurisdiction",
+                "applicable law",
+                "laws of"
+            ]
+        },
+        {
+            "name": "Signatures",
+            "category": "essential",
+            "importance": "mandatory",
+            "description": "Signatures of all parties or authorized representatives",
+            "keywords": [
+                "signature",
+                "signed",
+                "executed",
+                "witness"
+            ]
+        }
+    ],
+    "recommended_clauses": [
+        {
+            "name": "Confidentiality",
+            "category": "protection",
+            "importance": "recommended",
+            "description": "Protection of sensitive information shared between parties",
+            "keywords": [
+                "confidential",
+                "non-disclosure",
+                "proprietary",
+                "secret"
+            ]
+        },
+        {
+            "name": "Liability Limitation",
+            "category": "protection",
+            "importance": "recommended",
+            "description": "Limits on liability for each party",
+            "keywords": [
+                "liability",
+                "limitation",
+                "cap",
+                "maximum"
+            ]
+        },
+        {
+            "name": "Indemnification",
+            "category": "protection",
+            "importance": "recommended",
+            "description": "Protection against third-party claims",
+            "keywords": [
+                "indemnify",
+                "indemnification",
+                "hold harmless"
+            ]
+        },
+        {
+            "name": "Force Majeure",
+            "category": "protection",
+            "importance": "recommended",
+            "description": "Provisions for unforeseen circumstances beyond parties' control",
+            "keywords": [
+                "force majeure",
+                "act of god",
+                "unforeseen"
+            ]
+        },
+        {
+            "name": "Amendment Procedure",
+            "category": "administrative",
+            "importance": "recommended",
+            "description": "Process for modifying the contract",
+            "keywords": [
+                "amendment",
+                "modification",
+                "change",
+                "vary"
+            ]
+        },
+        {
+            "name": "Notice Provisions",
+            "category": "administrative",
+            "importance": "recommended",
+            "description": "How parties will communicate official notices",
+            "keywords": [
+                "notice",
+                "notification",
+                "communication",
+                "address"
+            ]
+        }
+    ],
+    "optional_clauses": [
+        {
+            "name": "Intellectual Property Rights",
+            "category": "protection",
+            "importance": "optional",
+            "description": "Ownership and usage rights for intellectual property",
+            "keywords": [
+                "intellectual property",
+                "copyright",
+                "patent",
+                "trademark"
+            ]
+        },
+        {
+            "name": "Non-Compete",
+            "category": "restriction",
+            "importance": "optional",
+            "description": "Restrictions on competing activities (subject to Indian Contract Act Section 27)",
+            "keywords": [
+                "non-compete",
+                "competition",
+                "restraint"
+            ]
+        },
+        {
+            "name": "Warranty",
+            "category": "assurance",
+            "importance": "optional",
+            "description": "Guarantees or assurances provided by parties",
+            "keywords": [
+                "warranty",
+                "guarantee",
+                "representation"
+            ]
+        },
+        {
+            "name": "Severability",
+            "category": "legal",
+            "importance": "optional",
+            "description": "Ensures contract remains valid even if some provisions are unenforceable",
+            "keywords": [
+                "severability",
+                "severable",
+                "invalid provision"
+            ]
+        }
+    ]
+}

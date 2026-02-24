@@ -1,0 +1,74 @@
+{
+    "high_risk": {
+        "keywords": [
+            "unlimited liability",
+            "perpetual",
+            "irrevocable",
+            "waive all rights",
+            "no warranty",
+            "as is",
+            "without recourse",
+            "sole discretion",
+            "unilateral",
+            "absolute",
+            "unconditional",
+            "forever",
+            "in perpetuity",
+            "without limitation",
+            "unlimited damages",
+            "no liability cap",
+            "waive all claims",
+            "release all liability"
+        ],
+        "weight": 10,
+        "description": "High-risk terms that could expose parties to significant liability or unfavorable conditions"
+    },
+    "medium_risk": {
+        "keywords": [
+            "indemnify",
+            "hold harmless",
+            "at will",
+            "no refund",
+            "non-refundable",
+            "exclusive remedy",
+            "limitation of liability",
+            "consequential damages",
+            "punitive damages",
+            "liquidated damages",
+            "penalty clause",
+            "automatic renewal",
+            "non-compete",
+            "restraint of trade",
+            "confidentiality obligation"
+        ],
+        "weight": 5,
+        "description": "Medium-risk terms that warrant careful review and consideration"
+    },
+    "low_risk": {
+        "keywords": [
+            "best efforts",
+            "reasonable notice",
+            "subject to approval",
+            "may be terminated",
+            "either party may",
+            "mutual agreement",
+            "good faith",
+            "commercially reasonable",
+            "industry standard"
+        ],
+        "weight": 2,
+        "description": "Low-risk terms that should be noted but may be standard practice"
+    },
+    "ambiguous_terms": [
+        "reasonable",
+        "appropriate",
+        "timely",
+        "substantial",
+        "material",
+        "significant",
+        "adequate",
+        "sufficient",
+        "promptly",
+        "forthwith"
+    ]
+}

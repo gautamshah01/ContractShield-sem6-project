@@ -1,0 +1,55 @@
+version: '3.9'
+
+services:
+  # ─── Backend (Flask + Gunicorn + SocketIO) ───────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: contractshield_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env.production
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URL=sqlite:////app/data/contract_analyzer.db
+    volumes:
+      - backend_uploads:/app/uploads
+      - backend_db:/app/data
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - contractshield_net
+
+  # ─── Frontend (Nginx serving built React app) ────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE_URL=/api
+        - VITE_SOCKET_URL=
+    container_name: contractshield_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - contractshield_net
+
+volumes:
+  backend_uploads:
+  backend_db:
+
+networks:
+  contractshield_net:
+    driver: bridge
