@@ -5,7 +5,8 @@ services:
   - type: web
     name: contractshield-backend
     runtime: python
-    region: singapore        # closest to India; change to oregon/frankfurt as needed
+    pythonVersion: "3.11.9"      # ← PIN Python 3.11 — spacy 3.7.2 has no wheels for 3.14
+    region: singapore             # closest to India
     plan: free
 
     # ── Build ──────────────────────────────────────────────────────────────────
@@ -13,24 +14,16 @@ services:
 
     # ── Start ──────────────────────────────────────────────────────────────────
     # eventlet worker is required for Flask-SocketIO
-    startCommand: >
-      gunicorn
-      --worker-class eventlet
-      --workers 1
-      --bind 0.0.0.0:$PORT
-      --timeout 120
-      --keep-alive 5
-      --access-logfile -
-      --error-logfile -
-      run:app
+    startCommand: gunicorn --worker-class eventlet --workers 1 --bind 0.0.0.0:$PORT --timeout 120 --keep-alive 5 --access-logfile - --error-logfile - run:app
 
     # ── Health check ───────────────────────────────────────────────────────────
     healthCheckPath: /health
 
     # ── Environment variables ─────────────────────────────────────────────────
-    # Set SECRET values in the Render dashboard (not here).
-    # Only non-secret defaults are listed here.
     envVars:
+      - key: PYTHON_VERSION       # belt-and-suspenders: also set as env var
+        value: "3.11.9"
+
       - key: FLASK_ENV
         value: production
 
