@@ -22,8 +22,8 @@ class NLPService:
         try:
             self.nlp = spacy.load('en_core_web_sm')
         except OSError:
-            print("ERROR: spaCy model not found. Run: python -m spacy download en_core_web_sm")
-            raise
+            print("[NLPService] WARNING: spaCy model 'en_core_web_sm' not found. NLP features disabled.")
+            self.nlp = None
         
         # Clause type keywords for classification
         self.clause_keywords = {

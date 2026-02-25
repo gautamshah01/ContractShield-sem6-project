@@ -20,14 +20,46 @@ from app.models.compliance_check import ComplianceCheck
 
 contracts_bp = Blueprint('contracts', __name__)
 
-nlp_service         = NLPService()
-risk_service        = RiskService()
-explanation_service = ExplanationService()
-pdf_extractor       = PDFExtractor()
-compliance_service  = ComplianceService()
-groq_service        = GroqService()
+# Instantiate services — wrapped in try/except so a missing spaCy model
+# or other init failure doesn't crash the entire Flask app at startup.
+try:
+    nlp_service = NLPService()
+except Exception as e:
+    print(f'[contracts] NLPService init failed (spaCy model missing?): {e}')
+    nlp_service = None
+
+try:
+    risk_service = RiskService()
+except Exception as e:
+    print(f'[contracts] RiskService init failed: {e}')
+    risk_service = None
+
+try:
+    explanation_service = ExplanationService()
+except Exception as e:
+    print(f'[contracts] ExplanationService init failed: {e}')
+    explanation_service = None
+
+try:
+    pdf_extractor = PDFExtractor()
+except Exception as e:
+    print(f'[contracts] PDFExtractor init failed: {e}')
+    pdf_extractor = None
+
+try:
+    compliance_service = ComplianceService()
+except Exception as e:
+    print(f'[contracts] ComplianceService init failed: {e}')
+    compliance_service = None
+
+try:
+    groq_service = GroqService()
+except Exception as e:
+    print(f'[contracts] GroqService init failed: {e}')
+    groq_service = None
 
 ALLOWED_EXTENSIONS = {'pdf', 'txt'}
+
 
 
 def allowed_file(filename):
