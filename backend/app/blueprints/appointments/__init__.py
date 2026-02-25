@@ -171,11 +171,12 @@ def get_messages(appt_id):
     msgs = ChatMessage.query.filter_by(appointment_id=appt_id)\
                .order_by(ChatMessage.created_at.asc()).all()
 
-    # Mark unread messages as read
-    for m in msgs:
-        if m.sender_id != user_id and not m.read:
+    # Mark unread messages as read — only commit when something changed
+    newly_read = [m for m in msgs if m.sender_id != user_id and not m.read]
+    if newly_read:
+        for m in newly_read:
             m.read = True
-    db.session.commit()
+        db.session.commit()
 
     return jsonify({
         'success': True,

@@ -30,18 +30,33 @@ function ChatPanel({ appointment, onClose, user }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
+  const [loadErr, setLoadErr] = useState(false);
   const bottomRef = useRef(null);
+  const loadingRef = useRef(false);   // guard: skip if a request is already in flight
+
   const myId = (() => {
     try { return JSON.parse(atob(user?.token?.split('.')[1] || '')).sub; } catch { return ''; }
   })();
 
   const load = async () => {
-    try { const { data } = await appointmentsApi.getMessages(appointment.id); setMessages(data.messages || []); } catch { }
+    if (loadingRef.current) return;   // don't overlap requests
+    loadingRef.current = true;
+    try {
+      const { data } = await appointmentsApi.getMessages(appointment.id);
+      setMessages(data.messages || []);
+      setLoadErr(false);
+    } catch (e) {
+      // only show error if it's not a timeout/abort (those are often transient)
+      if (e?.code !== 'ECONNABORTED') setLoadErr(true);
+    } finally {
+      loadingRef.current = false;
+    }
   };
 
   useEffect(() => { load(); }, [appointment.id]);
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
-  useEffect(() => { const t = setInterval(load, 4000); return () => clearInterval(t); }, [appointment.id]);
+  // Poll every 8s (was 4s) — Railway Postgres via external proxy is slower than local
+  useEffect(() => { const t = setInterval(load, 8000); return () => clearInterval(t); }, [appointment.id]);
 
   const send = async () => {
     if (!input.trim()) return;

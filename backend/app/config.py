@@ -27,11 +27,20 @@ class Config:
     SQLALCHEMY_DATABASE_URI = _db_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
-    # Connection pool settings (important for Supabase's connection limits)
+    # Connection pool — tuned for Railway's external TCP proxy
     SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_pre_ping': True,
-        'pool_recycle': 300,
-        'connect_args': {},
+        'pool_pre_ping':  True,       # test connection before checkout
+        'pool_recycle':   120,        # recycle every 2 min (proxy kills idle conns at ~5 min)
+        'pool_size':      5,
+        'max_overflow':   5,
+        'pool_timeout':   10,         # fail fast — don't block for 30s like default
+        'connect_args': {
+            'connect_timeout':      10,   # TCP connect timeout (seconds)
+            'keepalives':           1,    # enable TCP keepalive
+            'keepalives_idle':      10,   # start probing after 10s idle
+            'keepalives_interval':  5,    # retransmit every 5s
+            'keepalives_count':     3,    # drop after 3 failed probes
+        },
     }
     
     # JWT Configuration

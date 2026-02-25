@@ -20,18 +20,23 @@ function ChatPanel({ appointment, onClose }) {
     const [input, setInput] = useState('');
     const [sending, setSending] = useState(false);
     const bottomRef = useRef(null);
+    const loadingRef = useRef(false);   // guard: skip if a request is already in flight
 
     const load = async () => {
+        if (loadingRef.current) return;
+        loadingRef.current = true;
         try {
             const { data } = await appointmentsApi.getMessages(appointment.id);
             setMessages(data.messages || []);
-        } catch { }
+        } catch { } finally {
+            loadingRef.current = false;
+        }
     };
 
     useEffect(() => { load(); }, [appointment.id]);
     useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
     useEffect(() => {
-        const t = setInterval(load, 4000);
+        const t = setInterval(load, 8000);   // 8s — Railway proxy is slower than local
         return () => clearInterval(t);
     }, [appointment.id]);
 
