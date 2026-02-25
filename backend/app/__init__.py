@@ -62,17 +62,37 @@ def create_app(config_name=None):
         engineio_logger=False,
     )
     
-    # CORS — read from env for production flexibility
-    CORS(app,
-         origins=cors_origins,
-         supports_credentials=True,
-         allow_headers=["Content-Type", "Authorization"],
-         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    # ── Explicit OPTIONS preflight handler ───────────────────────────────────
+    # Flask-CORS sometimes returns non-200 on OPTIONS — handle it explicitly.
+    from flask import request as flask_request, make_response
+
+    @app.before_request
+    def handle_preflight():
+        if flask_request.method == "OPTIONS":
+            origin = flask_request.headers.get("Origin", "")
+            if origin in cors_origins:
+                res = make_response("", 200)
+                res.headers["Access-Control-Allow-Origin"] = origin
+                res.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+                res.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-Requested-With"
+                res.headers["Access-Control-Allow-Credentials"] = "true"
+                res.headers["Access-Control-Max-Age"] = "3600"
+                return res
+
+    # Flask-CORS for actual requests (adds headers to GET/POST/etc responses)
+    CORS(
+        app,
+        resources={r"/api/*": {
+            "origins": cors_origins,
+            "supports_credentials": True,
+            "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+        }}
     )
-    
+
     # Create upload folder if it doesn't exist
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    
+
     # Register blueprints
     register_blueprints(app)
 
@@ -85,7 +105,7 @@ def create_app(config_name=None):
 
     # Register JWT handlers
     register_jwt_handlers(app)
-    
+
     # Health check endpoint
     @app.route('/health', methods=['GET'])
     def health_check():
@@ -94,7 +114,7 @@ def create_app(config_name=None):
             'status': 'healthy',
             'environment': config_name
         }), 200
-    
+
     return app
 
 
