@@ -16,8 +16,17 @@ from app.services.groq_service import GroqService
 
 analysis_bp = Blueprint('analysis', __name__)
 
-compliance_service = ComplianceService()
-groq_service       = GroqService()
+try:
+    compliance_service = ComplianceService()
+except Exception as e:
+    print(f'[analysis] ComplianceService init failed: {e}')
+    compliance_service = None
+
+try:
+    groq_service = GroqService()
+except Exception as e:
+    print(f'[analysis] GroqService init failed: {e}')
+    groq_service = None
 
 
 # ──────────────────────────────────────────────────────────
