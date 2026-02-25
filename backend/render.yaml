@@ -14,7 +14,7 @@ services:
 
     # ── Start ──────────────────────────────────────────────────────────────────
     # eventlet worker is required for Flask-SocketIO
-    startCommand: gunicorn --worker-class eventlet --workers 1 --bind 0.0.0.0:$PORT --timeout 120 wsgi:app
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120 wsgi:app
 
     # ── Health check ───────────────────────────────────────────────────────────
     healthCheckPath: /health

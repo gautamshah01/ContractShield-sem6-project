@@ -52,14 +52,12 @@ def create_app(config_name=None):
     ).split(',')
     cors_origins = [o.strip() for o in cors_origins if o.strip()]
 
-    # async_mode must match the gunicorn worker class:
-    #   - production: eventlet (gunicorn --worker-class eventlet)
-    #   - development: threading (Flask dev server)
-    async_mode = 'eventlet' if config_name == 'production' else 'threading'
+    # async_mode='threading' works with gunicorn threaded workers and Flask dev server.
+    # SocketIO clients auto-fallback to long-polling on platforms without WebSocket support.
     socketio.init_app(
         app,
         cors_allowed_origins=cors_origins,
-        async_mode=async_mode,
+        async_mode='threading',
         logger=False,
         engineio_logger=False,
     )
