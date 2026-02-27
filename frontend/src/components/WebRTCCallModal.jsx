@@ -17,6 +17,7 @@ import {
     PhoneOff, Mic, MicOff, Video, VideoOff, Maximize2, Minimize2,
 } from 'lucide-react';
 import { useCall } from '../context/CallContext';
+import { useAuth } from '../context/AuthContext';
 
 const ICE_SERVERS = {
     iceServers: [
@@ -33,6 +34,7 @@ export default function WebRTCCallModal({
         sendOffer, sendAnswer, sendIce, endCall,
         onCallOffer, onCallAnswer, onCallIce, onCallEnded, onCallRejected,
     } = useCall();
+    const { user } = useAuth();
 
     // ── UI state ──────────────────────────────────────────────────
     const [status, setStatus] = useState(
@@ -307,9 +309,13 @@ export default function WebRTCCallModal({
         });
     }
 
-    const remoteName = role === 'caller'
-        ? (appointment?.client_name || appointment?.lawyer_name || 'Remote')
-        : (appointment?.lawyer_name || 'Lawyer');
+    // remoteName = the OTHER person on the call.
+    // Determined by the current user's role in the appointment (client ↔ lawyer),
+    // NOT by their call role (caller ↔ callee) — which caused the old bug.
+    const isClientUser = user?.role === 'client';
+    const remoteName = isClientUser
+        ? (appointment?.lawyer_name || 'Lawyer')   // client's remote is always the lawyer
+        : (appointment?.client_name || 'Client');  // lawyer's remote is always the client
 
     const dotCls =
         status === 'in-call' ? 'bg-emerald-400 animate-pulse' :
