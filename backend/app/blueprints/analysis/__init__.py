@@ -35,7 +35,11 @@ except Exception as e:
 @analysis_bp.route('/<int:contract_id>/compliance', methods=['GET'])
 @jwt_required()
 def get_compliance(contract_id):
-    """Run Indian law compliance checks on a contract."""
+    """Run Indian law compliance checks on a contract.
+
+    Always re-runs from contract text (pure Python keyword matching, <50ms).
+    This avoids any cached-score recalculation bugs.
+    """
     user_id  = int(get_jwt_identity())
     contract = Contract.query.filter_by(id=contract_id, user_id=user_id).first()
 
@@ -53,57 +57,8 @@ def get_compliance(contract_id):
 
     contract_text = contract.extracted_text or ''
 
-    # Check if we already ran compliance checks (avoid re-running)
-    existing = ComplianceCheck.query.filter_by(analysis_id=analysis.id).first() if analysis else None
-    if existing and analysis:
-        checks = [c.to_dict() for c in ComplianceCheck.query.filter_by(analysis_id=analysis.id).all()]
-        # Rebuild summary
-        passed   = sum(1 for c in checks if c['status'] == 'pass')
-        failed   = sum(1 for c in checks if c['status'] == 'fail')
-        warnings = sum(1 for c in checks if c['status'] in ('warning', 'info'))
-        mandatory_total  = sum(1 for r in compliance_service.rules if r['importance'] == 'mandatory')
-        # Fix: match by rule_name (stored in DB) — rule_id is NOT stored in ComplianceCheck model
-        mandatory_rule_names = {r['name'] for r in compliance_service.rules if r['importance'] == 'mandatory'}
-        mandatory_passed = sum(
-            1 for c in checks
-            if c['status'] == 'pass' and c.get('rule_name') in mandatory_rule_names
-        )
-        score = round((mandatory_passed / mandatory_total * 100) if mandatory_total else 100, 1)
-
-        return jsonify({
-            'success': True,
-            'contract_id': contract_id,
-            'compliance_score': score,
-            'overall_status': 'pass' if failed == 0 else 'partial' if failed <= 2 else 'fail',
-            'passed': passed,
-            'failed': failed,
-            'warnings': warnings,
-            'checks': checks,
-            'disclaimer': ComplianceService.DISCLAIMER,
-            'jurisdiction': 'India',
-            'legal_framework': [
-                'Indian Contract Act, 1872',
-                'Information Technology Act, 2000',
-                'Minimum Wages Act, 1948',
-                'Arbitration and Conciliation Act, 1996',
-            ]
-        }), 200
-
-    # Run fresh compliance check
+    # Always re-run compliance — pure Python keyword matching, no API call, ~10ms
     result = compliance_service.check_compliance(clauses, contract_text)
-
-    # Persist to DB
-    if analysis:
-        for check in result['checks']:
-            cc = ComplianceCheck(
-                analysis_id=analysis.id,
-                rule_name=check['rule_name'],
-                rule_reference=check['reference'],
-                status=check['status'],
-                explanation=check['explanation']
-            )
-            db.session.add(cc)
-        db.session.commit()
 
     return jsonify({
         'success': True,
