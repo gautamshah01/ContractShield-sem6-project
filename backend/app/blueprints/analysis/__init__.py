@@ -62,9 +62,11 @@ def get_compliance(contract_id):
         failed   = sum(1 for c in checks if c['status'] == 'fail')
         warnings = sum(1 for c in checks if c['status'] in ('warning', 'info'))
         mandatory_total  = sum(1 for r in compliance_service.rules if r['importance'] == 'mandatory')
+        # Fix: match by rule_name (stored in DB) — rule_id is NOT stored in ComplianceCheck model
+        mandatory_rule_names = {r['name'] for r in compliance_service.rules if r['importance'] == 'mandatory'}
         mandatory_passed = sum(
             1 for c in checks
-            if c['status'] == 'pass' and any(r['id'] == c.get('rule_id') and r['importance'] == 'mandatory' for r in compliance_service.rules)
+            if c['status'] == 'pass' and c.get('rule_name') in mandatory_rule_names
         )
         score = round((mandatory_passed / mandatory_total * 100) if mandatory_total else 100, 1)
 
